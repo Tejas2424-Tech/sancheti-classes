@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Dashboard | Sancheti Classes</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#5a4400",
+                        "primary-fixed": "#ffdad7",
+                        "surface-white": "#FFFFFF",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary-container": "#fdfcff",
+                        "outline": "#926e6c",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#ffdf97",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#e7bcb9",
+                        "on-secondary-container": "#6f5400",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-fixed-dim": "#f3bf2d",
+                        "surface-container-lowest": "#ffffff",
+                        "success-gold": "#F7C331",
+                        "surface-container-high": "#e6e8ea",
+                        "primary-container": "#e7142b",
+                        "inverse-surface": "#2d3133",
+                        "background": "#f7f9fb",
+                        "on-secondary-fixed": "#251a00",
+                        "on-primary-fixed-variant": "#930015",
+                        "inverse-primary": "#ffb3ae",
+                        "on-tertiary-fixed": "#011c37",
+                        "surface-dim": "#d8dadc",
+                        "surface-container": "#eceef0",
+                        "academic-navy": "#122B46",
+                        "error": "#ba1a1a",
+                        "link-blue": "#007CFF",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#475d7b",
+                        "on-primary-fixed": "#410004",
+                        "tertiary-fixed": "#d2e4ff",
+                        "tertiary-container": "#5f7695",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary-fixed-dim": "#b1c8ea",
+                        "primary": "#bb001e",
+                        "surface-tint": "#c0001f",
+                        "on-surface-variant": "#5e3f3d",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#fcc836",
+                        "energy-red": "#ED1B2F",
+                        "on-background": "#191c1e",
+                        "secondary": "#775a00",
+                        "surface-bright": "#f7f9fb",
+                        "primary-fixed-dim": "#ffb3ae",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-surface": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#314865",
+                        "surface": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-desktop": "64px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Montserrat"],
+                        "metric-xl": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "metric-xl": ["36px", {"lineHeight": "44px", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        /* Sidebar nav item */
+        .side-link {
+            transition: background-color .2s ease, color .2s ease;
+        }
+        .side-link.active {
+            background-color: #ED1B2F; /* energy-red */
+            color: #fff;
+        }
+        .side-link.active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Animated progress bar fill */
+        .progress-fill {
+            transition: width 1s cubic-bezier(.4,0,.2,1);
+        }
+        /* Sidebar slide behaviour (mobile) */
+        #dash-sidebar { transition: transform .3s ease; }
+        @media (max-width: 1023px) {
+            #dash-sidebar { transform: translateX(-100%); }
+            #dash-sidebar.open { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+
+<!-- Mobile overlay backdrop -->
+<div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+<div class="flex min-h-screen">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside id="dash-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-academic-navy text-white flex flex-col shrink-0">
+    <!-- Logo -->
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10">
+      <div class="bg-white rounded-lg p-1.5">
+        <img src="assets/sancheti.png" alt="Sancheti Classes" class="h-8 w-auto"/>
+      </div>
+      <span class="font-display-lg text-lg font-bold tracking-tight">Student Portal</span>
+    </div>
+    <!-- Profile mini -->
+    <div class="flex items-center gap-3 px-6 py-5 border-b border-white/10">
+      <img src="assets/ssc_abhishek_sutar.png" alt="Rahul Deshmukh" class="w-11 h-11 rounded-full object-cover border-2 border-success-gold"/>
+      <div class="min-w-0">
+        <p class="font-bold truncate">Rahul Deshmukh</p>
+        <p class="text-[12px] text-white/60 truncate">Grade 10 · SSC Batch</p>
+      </div>
+    </div>
+    <!-- Nav -->
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+      <a href="#overview" class="side-link active flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10">
+        <span class="material-symbols-outlined">dashboard</span><span>Overview</span>
+      </a>
+      <a href="#results" class="side-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10">
+        <span class="material-symbols-outlined">grade</span><span>My Results</span>
+      </a>
+      <a href="#attendance" class="side-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10">
+        <span class="material-symbols-outlined">event_available</span><span>Attendance</span>
+      </a>
+      <a href="#schedule" class="side-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10">
+        <span class="material-symbols-outlined">calendar_month</span><span>Schedule</span>
+      </a>
+      <a href="#materials" class="side-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10">
+        <span class="material-symbols-outlined">menu_book</span><span>Study Materials</span>
+      </a>
+      <a href="#fees" class="side-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10">
+        <span class="material-symbols-outlined">payments</span><span>Fees</span>
+      </a>
+      <div class="pt-4 mt-4 border-t border-white/10 space-y-1">
+        <a href="home.html" class="side-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10">
+          <span class="material-symbols-outlined">home</span><span>Back to Website</span>
+        </a>
+        <a href="#" class="side-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10">
+          <span class="material-symbols-outlined">logout</span><span>Logout</span>
+        </a>
+      </div>
+    </nav>
+    <div class="px-6 py-4 text-[11px] text-white/40 border-t border-white/10">Demo dashboard · sample data</div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="flex-1 min-w-0 flex flex-col">
+
+    <!-- Top bar -->
+    <header class="h-20 bg-surface-white border-b border-surface-variant flex items-center justify-between px-margin-mobile md:px-8 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <button id="sidebar-toggle" class="lg:hidden text-academic-navy" aria-label="Toggle sidebar">
+          <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+        <div>
+          <h1 class="font-headline-md text-headline-md text-academic-navy leading-tight">Dashboard</h1>
+          <p class="text-[12px] text-on-surface-variant hidden sm:block">Academic Year 2025–26</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative w-11 h-11 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors" aria-label="Notifications">
+          <span class="material-symbols-outlined text-academic-navy">notifications</span>
+          <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-energy-red rounded-full border-2 border-surface-white"></span>
+        </button>
+        <img src="assets/ssc_abhishek_sutar.png" alt="Rahul Deshmukh" class="w-11 h-11 rounded-full object-cover border-2 border-surface-variant"/>
+      </div>
+    </header>
+
+    <main class="flex-1 p-margin-mobile md:p-8 space-y-8 max-w-[1400px] w-full">
+
+      <!-- Welcome -->
+      <section id="overview" class="scroll-mt-24">
+        <div class="bg-academic-navy rounded-3xl p-8 text-white relative overflow-hidden">
+          <div class="relative z-10 max-w-xl">
+            <p class="text-success-gold font-label-md mb-2">Welcome back 👋</p>
+            <h2 class="font-headline-lg text-headline-lg mb-3">Hello, Rahul!</h2>
+            <p class="text-white/70 mb-6">You have <span class="text-success-gold font-bold">2 tests</span> this week and your attendance is looking great. Keep up the momentum!</p>
+            <a href="#schedule" class="inline-flex items-center gap-2 bg-energy-red px-5 py-3 rounded-xl font-bold hover:-translate-y-0.5 transition-transform">
+              View this week's plan <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+          </div>
+          <span class="material-symbols-outlined absolute -right-6 -bottom-8 text-[220px] text-white/5 pointer-events-none">school</span>
+        </div>
+      </section>
+
+      <!-- Stat tiles -->
+      <section class="grid grid-cols-2 lg:grid-cols-4 gap-gutter">
+        <div class="bg-surface-white rounded-2xl p-6 shadow-sm border border-surface-variant">
+          <div class="w-12 h-12 rounded-xl bg-energy-red/10 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-energy-red">trending_up</span>
+          </div>
+          <p class="font-metric-xl text-metric-xl text-academic-navy">92.4<span class="text-lg">%</span></p>
+          <p class="text-[13px] text-on-surface-variant mt-1">Overall Average</p>
+        </div>
+        <div class="bg-surface-white rounded-2xl p-6 shadow-sm border border-surface-variant">
+          <div class="w-12 h-12 rounded-xl bg-success-gold/20 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-secondary">event_available</span>
+          </div>
+          <p class="font-metric-xl text-metric-xl text-academic-navy">96<span class="text-lg">%</span></p>
+          <p class="text-[13px] text-on-surface-variant mt-1">Attendance</p>
+        </div>
+        <div class="bg-surface-white rounded-2xl p-6 shadow-sm border border-surface-variant">
+          <div class="w-12 h-12 rounded-xl bg-academic-navy/10 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-academic-navy">quiz</span>
+          </div>
+          <p class="font-metric-xl text-metric-xl text-academic-navy">28</p>
+          <p class="text-[13px] text-on-surface-variant mt-1">Tests Taken</p>
+        </div>
+        <div class="bg-surface-white rounded-2xl p-6 shadow-sm border border-surface-variant">
+          <div class="w-12 h-12 rounded-xl bg-link-blue/10 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-link-blue">military_tech</span>
+          </div>
+          <p class="font-metric-xl text-metric-xl text-academic-navy">#4</p>
+          <p class="text-[13px] text-on-surface-variant mt-1">Class Rank · of 120</p>
+        </div>
+      </section>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+
+        <!-- Subject performance -->
+        <section id="results" class="lg:col-span-2 bg-surface-white rounded-2xl p-6 md:p-8 shadow-sm border border-surface-variant scroll-mt-24">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-headline-md text-headline-md text-academic-navy">Subject Performance</h3>
+            <span class="text-[12px] font-bold text-success-gold bg-success-gold/10 px-3 py-1 rounded-full">Term 2</span>
+          </div>
+          <div class="space-y-5">
+            <div>
+              <div class="flex justify-between text-sm mb-2"><span class="font-semibold text-academic-navy">Mathematics</span><span class="text-on-surface-variant">96%</span></div>
+              <div class="h-2.5 bg-surface-container rounded-full overflow-hidden"><div class="progress-fill h-full bg-energy-red rounded-full" style="width:0" data-w="96%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2"><span class="font-semibold text-academic-navy">Science</span><span class="text-on-surface-variant">93%</span></div>
+              <div class="h-2.5 bg-surface-container rounded-full overflow-hidden"><div class="progress-fill h-full bg-academic-navy rounded-full" style="width:0" data-w="93%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2"><span class="font-semibold text-academic-navy">English</span><span class="text-on-surface-variant">88%</span></div>
+              <div class="h-2.5 bg-surface-container rounded-full overflow-hidden"><div class="progress-fill h-full bg-success-gold rounded-full" style="width:0" data-w="88%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2"><span class="font-semibold text-academic-navy">Social Studies</span><span class="text-on-surface-variant">90%</span></div>
+              <div class="h-2.5 bg-surface-container rounded-full overflow-hidden"><div class="progress-fill h-full bg-tertiary rounded-full" style="width:0" data-w="90%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2"><span class="font-semibold text-academic-navy">Marathi</span><span class="text-on-surface-variant">94%</span></div>
+              <div class="h-2.5 bg-surface-container rounded-full overflow-hidden"><div class="progress-fill h-full bg-energy-red rounded-full" style="width:0" data-w="94%"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Upcoming schedule -->
+        <section id="schedule" class="bg-surface-white rounded-2xl p-6 md:p-8 shadow-sm border border-surface-variant scroll-mt-24">
+          <h3 class="font-headline-md text-headline-md text-academic-navy mb-6">This Week</h3>
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center"><span class="text-[11px] font-bold text-energy-red">MON</span><span class="font-bold text-academic-navy">08</span></div>
+              <div class="flex-1 bg-energy-red/5 border-l-4 border-energy-red rounded-r-xl p-3">
+                <p class="font-semibold text-academic-navy text-sm">Maths Test — Trigonometry</p>
+                <p class="text-[12px] text-on-surface-variant">5:00 PM · Room 3</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center"><span class="text-[11px] font-bold text-academic-navy">WED</span><span class="font-bold text-academic-navy">10</span></div>
+              <div class="flex-1 bg-surface-container-low border-l-4 border-academic-navy rounded-r-xl p-3">
+                <p class="font-semibold text-academic-navy text-sm">Science Practical — Optics</p>
+                <p class="text-[12px] text-on-surface-variant">6:00 PM · Lab 1</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex flex-col items-center"><span class="text-[11px] font-bold text-secondary">FRI</span><span class="font-bold text-academic-navy">12</span></div>
+              <div class="flex-1 bg-success-gold/10 border-l-4 border-success-gold rounded-r-xl p-3">
+                <p class="font-semibold text-academic-navy text-sm">Doubt-Clearing Session</p>
+                <p class="text-[12px] text-on-surface-variant">4:30 PM · Room 5</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+        <!-- Recent results table -->
+        <section class="lg:col-span-2 bg-surface-white rounded-2xl p-6 md:p-8 shadow-sm border border-surface-variant">
+          <h3 class="font-headline-md text-headline-md text-academic-navy mb-6">Recent Test Results</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-[12px] uppercase tracking-wide text-on-surface-variant border-b border-surface-variant">
+                  <th class="pb-3 font-bold">Test</th>
+                  <th class="pb-3 font-bold">Subject</th>
+                  <th class="pb-3 font-bold">Date</th>
+                  <th class="pb-3 font-bold text-right">Score</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-surface-variant">
+                <tr><td class="py-3 font-semibold text-academic-navy">Weekly Test 12</td><td class="py-3 text-on-surface-variant">Mathematics</td><td class="py-3 text-on-surface-variant">01 Jul</td><td class="py-3 text-right"><span class="font-bold text-energy-red">48/50</span></td></tr>
+                <tr><td class="py-3 font-semibold text-academic-navy">Unit Test — Optics</td><td class="py-3 text-on-surface-variant">Science</td><td class="py-3 text-on-surface-variant">27 Jun</td><td class="py-3 text-right"><span class="font-bold text-academic-navy">45/50</span></td></tr>
+                <tr><td class="py-3 font-semibold text-academic-navy">Grammar Quiz</td><td class="py-3 text-on-surface-variant">English</td><td class="py-3 text-on-surface-variant">24 Jun</td><td class="py-3 text-right"><span class="font-bold text-secondary">42/50</span></td></tr>
+                <tr><td class="py-3 font-semibold text-academic-navy">Prelim 1</td><td class="py-3 text-on-surface-variant">All Subjects</td><td class="py-3 text-on-surface-variant">18 Jun</td><td class="py-3 text-right"><span class="font-bold text-energy-red">462/500</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Study materials -->
+        <section id="materials" class="bg-surface-white rounded-2xl p-6 md:p-8 shadow-sm border border-surface-variant scroll-mt-24">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-headline-md text-headline-md text-academic-navy">Study Materials</h3>
+          </div>
+          <div class="rounded-xl overflow-hidden mb-4 aspect-video bg-surface-container">
+            <img src="assets/course_books.png" alt="Sancheti Classes study materials" class="w-full h-full object-cover"/>
+          </div>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-energy-red">picture_as_pdf</span>
+              <span class="flex-1 text-sm font-medium text-academic-navy">Maths — Trigonometry Notes</span>
+              <span class="material-symbols-outlined text-on-surface-variant">download</span>
+            </li>
+            <li class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-academic-navy">picture_as_pdf</span>
+              <span class="flex-1 text-sm font-medium text-academic-navy">Science — Optics Worksheet</span>
+              <span class="material-symbols-outlined text-on-surface-variant">download</span>
+            </li>
+            <li class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-secondary">picture_as_pdf</span>
+              <span class="flex-1 text-sm font-medium text-academic-navy">Prelim 1 — Question Paper</span>
+              <span class="material-symbols-outlined text-on-surface-variant">download</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- Attendance + Fees row -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+        <section id="attendance" class="lg:col-span-2 bg-surface-white rounded-2xl p-6 md:p-8 shadow-sm border border-surface-variant scroll-mt-24">
+          <h3 class="font-headline-md text-headline-md text-academic-navy mb-6">Attendance — This Month</h3>
+          <div class="flex items-center gap-8 flex-wrap">
+            <div class="relative w-32 h-32 shrink-0">
+              <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#eceef0" stroke-width="3.5"></circle>
+                <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#ED1B2F" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="96 100"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="font-metric-xl text-2xl text-academic-navy font-extrabold">96%</span>
+                <span class="text-[11px] text-on-surface-variant">Present</span>
+              </div>
+            </div>
+            <div class="flex-1 min-w-[180px] space-y-3">
+              <div class="flex items-center justify-between"><span class="flex items-center gap-2 text-sm text-academic-navy"><span class="w-3 h-3 rounded-full bg-energy-red"></span>Present</span><span class="font-bold">24 days</span></div>
+              <div class="flex items-center justify-between"><span class="flex items-center gap-2 text-sm text-academic-navy"><span class="w-3 h-3 rounded-full bg-success-gold"></span>Late</span><span class="font-bold">1 day</span></div>
+              <div class="flex items-center justify-between"><span class="flex items-center gap-2 text-sm text-academic-navy"><span class="w-3 h-3 rounded-full bg-surface-container"></span>Absent</span><span class="font-bold">1 day</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="fees" class="bg-surface-white rounded-2xl p-6 md:p-8 shadow-sm border border-surface-variant scroll-mt-24">
+          <h3 class="font-headline-md text-headline-md text-academic-navy mb-6">Fees Status</h3>
+          <div class="bg-success-gold/10 border border-success-gold/30 rounded-xl p-4 mb-4 flex items-center gap-3">
+            <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">check_circle</span>
+            <div><p class="font-bold text-academic-navy text-sm">Installment 2 · Paid</p><p class="text-[12px] text-on-surface-variant">Receipt #SC-20482</p></div>
+          </div>
+          <div class="flex justify-between text-sm mb-2"><span class="text-on-surface-variant">Paid so far</span><span class="font-bold text-academic-navy">₹60,000 / ₹80,000</span></div>
+          <div class="h-2.5 bg-surface-container rounded-full overflow-hidden mb-4"><div class="progress-fill h-full bg-energy-red rounded-full" style="width:0" data-w="75%"></div></div>
+          <button class="w-full bg-academic-navy text-white py-3 rounded-xl font-bold hover:bg-primary transition-colors">Pay Next Installment</button>
+        </section>
+      </div>
+
+      <p class="text-center text-[12px] text-on-surface-variant pb-4">© 2020–2026 Sancheti Classes · This is a demo student dashboard with sample data.</p>
+    </main>
+  </div>
+</div>
+
+<script>
+  // Sidebar toggle (mobile)
+  (function () {
+    const sidebar = document.getElementById('dash-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const toggle = document.getElementById('sidebar-toggle');
+    function open() { sidebar.classList.add('open'); backdrop.classList.remove('hidden'); }
+    function close() { sidebar.classList.remove('open'); backdrop.classList.add('hidden'); }
+    toggle.addEventListener('click', function () {
+      sidebar.classList.contains('open') ? close() : open();
+    });
+    backdrop.addEventListener('click', close);
+    // Close on link tap (mobile)
+    sidebar.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function () { if (window.innerWidth < 1024) close(); });
+    });
+  })();
+
+  // Active nav highlight based on scroll position
+  (function () {
+    const links = Array.from(document.querySelectorAll('.side-link[href^="#"]'));
+    const sections = links.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+    function setActive(id) {
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    }
+    links.forEach(l => l.addEventListener('click', () => setActive(l.getAttribute('href').slice(1))));
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
+      }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+      sections.forEach(s => obs.observe(s));
+    }
+  })();
+
+  // Animate progress bars into view
+  (function () {
+    const bars = Array.from(document.querySelectorAll('.progress-fill'));
+    function fill() { bars.forEach(b => { b.style.width = b.getAttribute('data-w'); }); }
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(function (entries, o) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.style.width = e.target.getAttribute('data-w'); o.unobserve(e.target); } });
+      }, { threshold: 0.3 });
+      bars.forEach(b => obs.observe(b));
+    } else { setTimeout(fill, 300); }
+  })();
+</script>
+</body></html>

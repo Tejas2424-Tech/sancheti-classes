@@ -1,0 +1,4 @@
+.vscode/
+.DS_Store
+*.log
+temp_repo/
